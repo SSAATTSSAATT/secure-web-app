@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <a href="index.html">Home</a>
+</div>
+
+<div class="container">
+  <h2>Welcome, User</h2>
+  <p>Role: user</p>
+
+  <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <h3>Comments</h3>
+  <input type="text" id="commentInput" placeholder="Write a comment">
+  <button onclick="addComment()">Add</button>
+
+  <ul id="commentsList"></ul>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
