@@ -37,10 +37,20 @@ async function register() {
         window.location.href = "login.html";
     }
 }
-function logout() {
-  localStorage.clear(); // Clear the saved username and role[cite: 1]
+
+// sol edit this method
+async function logout() {
+  localStorage.clear();
+
+  await fetch('/logout', {
+    method: 'POST'
+  });
+
   window.location.href = "index.html";
 }
+
+// end sol
+
 
 // Keep this exactly as it is! 
 // Using .innerHTML is the XSS vulnerability you need to fix in Part 2[cite: 1].

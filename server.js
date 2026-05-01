@@ -1,12 +1,29 @@
-const express = require('express');
+
+// sol
+const express = require('express'); 
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');  // bcrypt
+const session = require('express-session');
+const path = require('path');
+
 const app = express();
 
 app.use(bodyParser.json());
-app.use(express.static('.'));
+
+app.use(session({
+    secret: 'secure-web-app-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false
+    }
+}));
+
+// end sol
 
 const db = new sqlite3.Database('./database.sqlite');
 const SALT_ROUNDS = 10;  
@@ -20,6 +37,46 @@ db.serialize(() => {
         bio TEXT
     )`);
 });
+
+
+//sol
+// ==============================================
+// Access Control - RBAC
+// ==============================================
+
+// Check if the user is logged in
+function requireLogin(req, res, next) {
+    if (!req.session.user) {
+        return res.redirect('/login.html');
+    }
+    next();
+}
+
+// Check if the logged-in user has the admin role
+function requireAdmin(req, res, next) {
+    if (req.session.user.role !== 'admin') {
+        return res.status(403).send(`
+            <h2>Access Denied</h2>
+            <p>You are authenticated, but you are not authorized to access the admin page.</p>
+            <a href="/dashboard.html">Back to Dashboard</a>
+        `);
+    }
+    next();
+}
+
+// Protected admin page
+app.get('/admin.html', requireLogin, requireAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Serve static files after protecting admin.html
+app.use(express.static('.'));
+
+// end sol
+
+
+
+
 
 //this code for dena
 
@@ -106,12 +163,71 @@ app.post('/login', async (req, res) => {
         
         const isValid = await bcrypt.compare(password, row.password);
         
+/*sol edit this code
         if (isValid) {
             res.json(row);
         } else {
             res.status(401).send({ message: "Invalid credentials" });
         } //end code for dena
+
+*/
+// sol alt code
+
+if (isValid) {
+    req.session.user = {
+        id: row.id,
+        username: row.username,
+        role: row.role
+    };
+
+    res.json({
+        username: row.username,
+        role: row.role
+    });
+} else {
+    res.status(401).send({ message: "Invalid credentials" });
+}
+
+// end sol
+
+
     });
 });
+
+// sol
+
+app.post('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.send({ message: "Logged out successfully" });
+    });
+});
+
+// end sol
+
+
+// Temporary route to promote a user to admin for testing RBAC
+app.get('/make-admin/:username', (req, res) => {
+    const username = req.params.username;
+
+    db.run(
+        "UPDATE users SET role = 'admin' WHERE username = ?",
+        [username],
+        function(err) {
+            if (err) {
+                return res.status(500).send("Error updating user role.");
+            }
+
+            if (this.changes === 0) {
+                return res.status(404).send("User not found.");
+            }
+
+            res.send(`${username} is now an admin.`);
+        }
+    );
+});
+
+// end tempo sol
+
+
 
 app.listen(3000, () => console.log('Server: http://localhost:3000 (Using bcrypt - Secure)'));
