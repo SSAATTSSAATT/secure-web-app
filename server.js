@@ -204,8 +204,11 @@ app.post('/logout', (req, res) => {
 
 // end sol
 
+/*tempo sol
+Temporary route used only for testing RBAC.
+It was used to promote a test account to admin.
+This route must be disabled before final submission.
 
-// Temporary route to promote a user to admin for testing RBAC
 app.get('/make-admin/:username', (req, res) => {
     const username = req.params.username;
 
@@ -226,8 +229,7 @@ app.get('/make-admin/:username', (req, res) => {
     );
 });
 
-// end tempo sol
-
+end tempo sol*/
 
 
 app.listen(3000, () => console.log('Server: http://localhost:3000 (Using bcrypt - Secure)'));
