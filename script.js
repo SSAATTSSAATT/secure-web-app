@@ -6,7 +6,8 @@ async function login() {
     // 2. Send a POST request to your Node.js server
     //jojo//
     //const response = await fetch('/login', {//
-    const response = await fetch('/login_vulnerable', {
+    //const response = await fetch('/login_vulnerable', {//
+    const response = await fetch('/login_secure', {
         //jojo//
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
