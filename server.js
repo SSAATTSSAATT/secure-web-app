@@ -183,6 +183,44 @@ if (isValid) {
     });
 });
 
+//jojo//
+
+// ==============================================
+// SQL Injection VULNERABLE Login
+// ==============================================
+
+app.post('/login_vulnerable', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    // Vulnerable SQL query: user input is directly added to the query
+    const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+
+    console.log("Vulnerable SQL Query:", query);
+
+    db.get(query, (err, user) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Database error" });
+        }
+
+        if (user) {
+            req.session.user = {
+                id: user.id,
+                username: user.username,
+                role: user.role
+            };
+
+            return res.json({
+                username: user.username,
+                role: user.role
+            });
+        } else {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+    });
+});
+//jojo//
 
 app.post('/logout', (req, res) => {
     req.session.destroy(() => {
