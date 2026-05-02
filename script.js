@@ -4,7 +4,10 @@ async function login() {
     const passwordInput = document.getElementById("loginPassword").value;
 
     // 2. Send a POST request to your Node.js server
-    const response = await fetch('/login', {
+    //jojo//
+    //const response = await fetch('/login', {//
+    const response = await fetch('/login_vulnerable', {
+        //jojo//
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username: usernameInput, password: passwordInput })
