@@ -220,6 +220,46 @@ app.post('/login_vulnerable', (req, res) => {
         }
     });
 });
+
+
+// ==============================================
+// SQL Injection SECURE Login
+// ==============================================
+
+app.post('/login_secure', async (req, res) => {
+    const { username, password } = req.body;
+
+    // Secure SQL query: parameterized query prevents SQL Injection
+    const query = "SELECT * FROM users WHERE username = ?";
+
+    db.get(query, [username], async (err, row) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Database error" });
+        }
+
+        if (!row) {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+
+        const isValid = await bcrypt.compare(password, row.password);
+
+        if (isValid) {
+            req.session.user = {
+                id: row.id,
+                username: row.username,
+                role: row.role
+            };
+
+            return res.json({
+                username: row.username,
+                role: row.role
+            });
+        } else {
+            return res.status(401).json({ message: "Invalid username or password" });
+        }
+    });
+});
 //jojo//
 
 app.post('/logout', (req, res) => {
