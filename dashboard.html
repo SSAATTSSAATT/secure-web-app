@@ -12,9 +12,18 @@
 
 <div class="container">
   <h2 id="welcomeMessage">Welcome, User</h2>
-  <p>Role: user</p>
+  <p id="roleText">Role: user</p>
 
   <button onclick="logout()">Logout</button>
+
+  <hr>
+
+  <!-- ========== BIO SECTION - XSS VULNERABLE ========== -->
+  <h3>Update Your Bio (XSS Vulnerable)</h3>
+  <input type="text" id="bioInput" placeholder="Enter your bio" style="width:90%">
+  <br><br>
+  <button onclick="updateBio()">Update Bio</button>
+  <button onclick="showAllBios()">Show All Bios</button>
 
   <hr>
 

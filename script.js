@@ -21,6 +21,7 @@ async function login() {
         alert("Invalid username or password!");
     }
 }
+
 async function register() {
     const usernameInput = document.getElementById("regUsername").value;
     const passwordInput = document.getElementById("regPassword").value;
@@ -50,7 +51,6 @@ async function logout() {
 }
 
 // end sol
-
 
 // Keep this exactly as it is! 
 // Using .innerHTML is the XSS vulnerability you need to fix in Part 2[cite: 1].
@@ -82,3 +82,39 @@ window.onload = function() {
         }
     }
 };
+
+// ==============================================
+// BIO Functions - XSS Vulnerable
+// ==============================================
+
+async function updateBio() {
+    const bio = document.getElementById('bioInput').value;
+    if (!bio) {
+        alert("Please enter a bio!");
+        return;
+    }
+    
+    try {
+        const response = await fetch('/update-bio', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ bio: bio })
+        });
+        
+        const text = await response.text();
+
+try {
+    const result = JSON.parse(text);
+    alert(result.message);
+} catch {
+    alert(text); // لو رجع HTML (مثلاً login page)
+}
+        document.getElementById('bioInput').value = '';
+    } catch (error) {
+        alert("Error: " + error);
+    }
+}
+
+async function showAllBios() {
+    window.open('/all-bios', '_blank');
+}
