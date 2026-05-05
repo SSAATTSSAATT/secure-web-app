@@ -230,7 +230,6 @@ app.post('/login_vulnerable', (req, res) => {
 // ==============================================
 // SQL Injection SECURE Login
 // ==============================================
-
 app.post('/login_secure', async (req, res) => {
     const { username, password } = req.body;
 
