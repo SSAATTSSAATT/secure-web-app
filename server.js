@@ -137,14 +137,17 @@ app.post('/register', async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
         
-        const sql = `INSERT INTO users (username, password) VALUES ('${username}', '${hashedPassword}')`;
+          //jojo//
+       const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+
+db.run(sql, [username, hashedPassword], (err) => {
+    if (err) {
+        return res.status(400).send({ message: "Error: User might already exist." });
+    }
+    res.send({ message: "User registered successfully with bcrypt!" });
+});
+        //jojo//
         
-        db.run(sql, (err) => {
-            if (err) {
-                return res.status(400).send({ message: "Error: User might already exist." });
-            }
-            res.send({ message: "User registered successfully with bcrypt!" });
-        });
     } catch (error) {
         res.status(500).send({ message: "Server error" });
     }
