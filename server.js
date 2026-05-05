@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');  // bcrypt
 const session = require('express-session');
 const path = require('path');
 const xss = require('xss');
+const https = require('https');
+const fs = require('fs');
 
 const app = express();
 
@@ -19,7 +21,7 @@ app.use(session({
     cookie: {
         httpOnly: true,
         sameSite: 'lax',
-        secure: false
+        secure: true // Ensure secureness of session cookies
     }
 }));
 
@@ -440,5 +442,15 @@ app.get('/all-bios', (req, res) => {
     });
 });
 
+// Ghada
+// Ensuring sensitive data is stored securely and transmitted over HTTPS
 
-app.listen(3000, () => console.log('Server: http://localhost:3000'));
+// Load SSL certificates generated via OpenSSL
+const sslOptions = {
+    key: fs.readFileSync('server.key'), // Your private key
+    cert: fs.readFileSync('server.cert') // Your certificate
+};
+
+https.createServer(sslOptions, app).listen(3000, () => {
+    console.log('Secure Server running at: https://localhost:3000');
+});
