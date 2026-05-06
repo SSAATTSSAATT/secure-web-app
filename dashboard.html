@@ -13,8 +13,11 @@
 <div class="container">
   <h2 id="welcomeMessage">Welcome, User</h2>
   <p id="roleText">Role: user</p>
+  <!-- Admin button: hidden by default, shown only for admin users from script.js -->
+  <button id="adminButton" onclick="window.location.href='admin.html'" style="display: none;">
+    Admin Panel
+  </button>
 
-  <button onclick="logout()">Logout</button>
 
   <hr>
 
@@ -32,8 +35,11 @@
   <button onclick="addComment()">Add</button>
 
   <ul id="commentsList"></ul>
-</div>
 
+  <hr>
+
+  <button onclick="logout()">Logout</button>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
