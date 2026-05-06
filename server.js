@@ -1,15 +1,16 @@
-// sol
 const express = require('express'); 
 const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');  // bcrypt
+//sol
 const session = require('express-session');
 const path = require('path');
+//end sol
 const xss = require('xss');
 const https = require('https');
 const fs = require('fs');
-
+//sol
 const app = express();
 
 app.use(bodyParser.json());
