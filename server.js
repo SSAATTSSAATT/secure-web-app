@@ -136,8 +136,7 @@ app.post('/register', async (req, res) => {
     try {
         
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-        //const sql = `INSERT INTO users (username, password) VALUES ('${username}', '${hashedPassword}')`;//
-          //jojo//
+        
        const sql = "INSERT INTO users (username, password) VALUES (?, ?)";
 
 db.run(sql, [username, hashedPassword], (err) => {
@@ -146,49 +145,11 @@ db.run(sql, [username, hashedPassword], (err) => {
     }
     res.send({ message: "User registered successfully with bcrypt!" });
 });
-        //jojo//
         
     } catch (error) {
         res.status(500).send({ message: "Server error" });
     }
 });
-
-
-app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    
-    
-    const query = `SELECT * FROM users WHERE username = '${username}'`;
-    
-    db.get(query, async (err, row) => {
-        if (!row) {
-            return res.status(401).send({ message: "Invalid credentials" });
-        }
-        
-        
-        const isValid = await bcrypt.compare(password, row.password);
-        
-
-if (isValid) {
-    req.session.user = {
-        id: row.id,
-        username: row.username,
-        role: row.role
-    };
-
-    res.json({
-        username: row.username,
-        role: row.role
-    });
-} else {
-    res.status(401).send({ message: "Invalid credentials" });
-}
-
-
-    });
-});
-
-//jojo//
 
 // ==============================================
 // SQL Injection VULNERABLE Login
@@ -264,7 +225,6 @@ app.post('/login_secure', async (req, res) => {
         }
     });
 });
-//jojo//
 
 app.post('/logout', (req, res) => {
     req.session.destroy(() => {
