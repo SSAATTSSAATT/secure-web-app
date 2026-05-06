@@ -274,32 +274,7 @@ app.post('/logout', (req, res) => {
 
 // end sol
 
-/*tempo sol
-Temporary route used only for testing RBAC.
-It was used to promote a test account to admin.
-This route must be disabled before final submission.
 
-app.get('/make-admin/:username', (req, res) => {
-    const username = req.params.username;
-
-    db.run(
-        "UPDATE users SET role = 'admin' WHERE username = ?",
-        [username],
-        function(err) {
-            if (err) {
-                return res.status(500).send("Error updating user role.");
-            }
-
-            if (this.changes === 0) {
-                return res.status(404).send("User not found.");
-            }
-
-            res.send(`${username} is now an admin.`);
-        }
-    );
-});
-
-end tempo sol*/
 
 // ==============================================
 //  XSS VULNERABLE (WEAK - FULLY INDEPENDENT)
