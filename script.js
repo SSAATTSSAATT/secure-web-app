@@ -63,21 +63,26 @@ function addComment() {
   input.value = "";
 }
 
-// This runs every time a page is loaded
 window.onload = function() {
-    // Check if we are on the dashboard page[cite: 3]
+    // Check if we are on the dashboard page
     if (document.getElementById("welcomeMessage")) {
         const storedName = localStorage.getItem("username");
         const storedRole = localStorage.getItem("role");
 
         if (storedName) {
-            // Update the <h2> tag with the actual username
+            // Display username
             document.getElementById("welcomeMessage").innerText = `Welcome, ${storedName}`;
-            
-            // If you want to update the role text as well:[cite: 3]
-            const roleElement = document.querySelector("p"); 
+
+            // Display role
+            const roleElement = document.getElementById("roleText");
             if (roleElement) {
                 roleElement.innerText = `Role: ${storedRole}`;
+            }
+
+            // Show Admin Panel button only for admin users
+            const adminButton = document.getElementById("adminButton");
+            if (adminButton && storedRole === "admin") {
+                adminButton.style.display = "inline-block";
             }
         }
     }
