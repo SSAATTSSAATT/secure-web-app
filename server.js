@@ -79,18 +79,16 @@ app.use(express.static('.'));
 
 
 
-//this code for dena
 
-// ==============================================
-// use MD5 
-// ==============================================
+
+// use MD5 (week passwords)
+
 /*
-
 function hashMD5(password) {
     return crypto.createHash('md5').update(password).digest('hex');
 }
 
-// 
+
 app.post('/register', (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = hashMD5(password);
@@ -105,7 +103,7 @@ app.post('/register', (req, res) => {
     });
 });
 
-// 
+
 app.post('/login', (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = hashMD5(password);
@@ -124,9 +122,8 @@ app.post('/login', (req, res) => {
 
 
 
-// ==============================================
-// use bcrypt 
-// ==============================================
+
+// use bcrypt (secure)
 
 
 app.post('/register', async (req, res) => {
@@ -149,6 +146,8 @@ db.run(sql, [username, hashedPassword], (err) => {
         res.status(500).send({ message: "Server error" });
     }
 });
+
+
 
 // ==============================================
 // SQL Injection VULNERABLE Login
@@ -235,55 +234,9 @@ app.post('/logout', (req, res) => {
 
 
 
-// ==============================================
-//  XSS VULNERABLE (WEAK - FULLY INDEPENDENT)
-// ==============================================
-
-app.post('/update-bio-weak', requireLogin, (req, res) => {
-    const { bio } = req.body;
-    const userId = req.session.user.id;
-
-    db.run(
-        "UPDATE users SET bio = ? WHERE id = ?",
-        [bio, userId],
-        (err) => {
-            if (err) {
-                return res.status(500).send({ message: "Error updating bio (weak)" });
-            }
-            res.send({ message: "Bio updated (weak)!" });
-        }
-    );
-});
-
-app.get('/all-bios-weak', (req, res) => {
-    db.all("SELECT username, bio FROM users", (err, rows) => {
-        if (err) {
-            return res.send("Error (weak)");
-        }
-
-        let html = `
-        <html>
-        <head><title>VULNERABLE</title></head>
-        <body>
-        <h1>Vulnerable Version (XSS)</h1>
-        <p style="color:red;">⚠️ This page is vulnerable to XSS</p>
-        <ul>
-        `;
-
-        rows.forEach(row => {
-            //  NO SANITIZATION (XSS)
-            html += `<li><b>${row.username}</b>: ${row.bio}</li>`;
-        });
-
-        html += `</ul></body></html>`;
-
-        res.send(html);
-    });
-});
 
 // ==============================================
-//  XSS WEAK (FULLY INDEPENDENT)
-//  شغّليه لحاله فقط
+//  XSS WEAK 
 // ==============================================
 /*
 
@@ -314,12 +267,12 @@ app.get('/all-bios', (req, res) => {
         <head><title>VULNERABLE</title></head>
         <body>
         <h1>Vulnerable Version (XSS)</h1>
-        <p style="color:red;">⚠️ This page is vulnerable to XSS</p>
+        <p style="color:red;"> This page is vulnerable to XSS</p>
         <ul>
         `;
 
         rows.forEach(row => {
-            // بدون فلترة (XSS)
+            
             html += `<li><b>${row.username}</b>: ${row.bio}</li>`;
         });
 
@@ -330,8 +283,7 @@ app.get('/all-bios', (req, res) => {
 
 
 // ==============================================
-//  XSS SECURE (FULLY INDEPENDENT)
-//  ✅ شغّليه لحاله فقط
+//  XSS SECURE
 // ==============================================
 
 
@@ -339,7 +291,7 @@ app.post('/update-bio', requireLogin, (req, res) => {
     const { bio } = req.body;
     const userId = req.session.user.id;
 
-    // نخزّن زي ما هو (الحماية وقت العرض)
+   
     db.run(
         "UPDATE users SET bio = ? WHERE id = ?",
         [bio, userId],
@@ -363,12 +315,12 @@ app.get('/all-bios', (req, res) => {
         <head><title>SECURE</title></head>
         <body>
         <h1>Secure Version (Protected)</h1>
-        <p style="color:green;">✅ This page is protected from XSS</p>
+        <p style="color:green;"> This page is protected from XSS</p>
         <ul>
         `;
 
         rows.forEach(row => {
-            // ✅ فلترة XSS
+           
             const clean = xss(row.bio);
             html += `<li><b>${row.username}</b>: ${clean}</li>`;
         });
@@ -377,6 +329,7 @@ app.get('/all-bios', (req, res) => {
         res.send(html);
     });
 });
+
 
 // Ghada
 // Ensuring sensitive data is stored securely and transmitted over HTTPS
