@@ -43,9 +43,7 @@ db.serialize(() => {
 
 
 //sol
-// ==============================================
 // Access Control - RBAC
-// ==============================================
 
 // Check if the user is logged in
 function requireLogin(req, res, next) {
