@@ -39,18 +39,18 @@ async function register() {
     }
 }
 
-// sol edit this method
 async function logout() {
   localStorage.clear();
+  // Send logout request to destroy the server session
 
   await fetch('/logout', {
     method: 'POST'
   });
+  // Redirect the user to the home page
 
   window.location.href = "index.html";
 }
 
-// end sol
 
 // Keep this exactly as it is! 
 // Using .innerHTML is the XSS vulnerability you need to fix in Part 2[cite: 1].
@@ -64,7 +64,7 @@ function addComment() {
 }
 
 window.onload = function() {
-    // Check if we are on the dashboard page
+    // run this code only on the dashboard page
     if (document.getElementById("welcomeMessage")) {
         const storedName = localStorage.getItem("username");
         const storedRole = localStorage.getItem("role");
