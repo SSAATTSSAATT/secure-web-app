@@ -3,14 +3,12 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');  // bcrypt
-//sol
 const session = require('express-session');
 const path = require('path');
-//end sol
 const xss = require('xss');
 const https = require('https');
 const fs = require('fs');
-//sol
+
 const app = express();
 
 app.use(bodyParser.json());
@@ -26,7 +24,6 @@ app.use(session({
     }
 }));
 
-// end sol
 
 const db = new sqlite3.Database('./database.sqlite');
 const SALT_ROUNDS = 10;  
@@ -42,7 +39,7 @@ db.serialize(() => {
 });
 
 
-//sol
+
 // Access Control - RBAC
 
 // Check if the user is logged in
@@ -73,7 +70,7 @@ app.get('/admin.html', requireLogin, requireAdmin, (req, res) => {
 // Serve static files after protecting admin.html
 app.use(express.static('.'));
 
-// end sol
+
 
 
 
@@ -230,7 +227,7 @@ app.post('/logout', (req, res) => {
     });
 });
 
-// end sol
+
 
 
 
