@@ -44,7 +44,7 @@ db.serialize(() => {
 
 // Check if the user is logged in
 function requireLogin(req, res, next) {
-    if (!req.session.user) {
+    if (!req.session.user) {     // Redirect users who are not logged in
         return res.redirect('/login.html');
     }
     next();
@@ -205,6 +205,7 @@ app.post('/login_secure', async (req, res) => {
         const isValid = await bcrypt.compare(password, row.password);
 
         if (isValid) {
+     // Store user data in the session for access control
             req.session.user = {
                 id: row.id,
                 username: row.username,
@@ -221,6 +222,8 @@ app.post('/login_secure', async (req, res) => {
     });
 });
 
+
+    // Destroy the session when the user logs out
 app.post('/logout', (req, res) => {
     req.session.destroy(() => {
         res.send({ message: "Logged out successfully" });
