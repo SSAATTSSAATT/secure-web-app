@@ -185,7 +185,9 @@ Log in with an admin account where:
 role = admin
 ```
 
-Then open:
+After login, the dashboard should display the Admin Panel button.
+
+Then click the Admin Panel button or open:
 
 ```text
 https://localhost:3000/admin.html
