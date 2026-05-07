@@ -3,8 +3,10 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');  // bcrypt
+// Required for session-based access control
 const session = require('express-session');
 const path = require('path');
+
 const xss = require('xss');
 const https = require('https');
 const fs = require('fs');
@@ -12,7 +14,7 @@ const fs = require('fs');
 const app = express();
 
 app.use(bodyParser.json());
-
+// Enable server-side sessions to manage logged-in users
 app.use(session({
     secret: 'secure-web-app-secret-key',
     resave: false,
