@@ -39,18 +39,18 @@ async function register() {
     }
 }
 
+// sol edit this method
 async function logout() {
   localStorage.clear();
-  // Send logout request to destroy the server session
 
   await fetch('/logout', {
     method: 'POST'
   });
-  // Redirect the user to the home page
 
   window.location.href = "index.html";
 }
 
+// end sol
 
 // Keep this exactly as it is! 
 // Using .innerHTML is the XSS vulnerability you need to fix in Part 2[cite: 1].
@@ -63,26 +63,21 @@ function addComment() {
   input.value = "";
 }
 
+// This runs every time a page is loaded
 window.onload = function() {
-    // run this code only on the dashboard page
+    // Check if we are on the dashboard page[cite: 3]
     if (document.getElementById("welcomeMessage")) {
         const storedName = localStorage.getItem("username");
         const storedRole = localStorage.getItem("role");
 
         if (storedName) {
-            // Display username
+            // Update the <h2> tag with the actual username
             document.getElementById("welcomeMessage").innerText = `Welcome, ${storedName}`;
-
-            // Display role
-            const roleElement = document.getElementById("roleText");
+            
+            // If you want to update the role text as well:[cite: 3]
+            const roleElement = document.querySelector("p"); 
             if (roleElement) {
                 roleElement.innerText = `Role: ${storedRole}`;
-            }
-
-            // Show Admin Panel button only for admin users
-            const adminButton = document.getElementById("adminButton");
-            if (adminButton && storedRole === "admin") {
-                adminButton.style.display = "inline-block";
             }
         }
     }
