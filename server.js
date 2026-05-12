@@ -79,9 +79,9 @@ app.use(express.static('.'));
 
 
 
-
+// ==============================================
 // use MD5 (week passwords)
-
+// ==============================================
 /*
 function hashMD5(password) {
     return crypto.createHash('md5').update(password).digest('hex');
@@ -121,9 +121,9 @@ app.post('/login', (req, res) => {
 
 
 
-
+// ==============================================
 // use bcrypt (secure)
-
+// ==============================================
 
 app.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -145,6 +145,34 @@ db.run(sql, [username, hashedPassword], (err) => {
         res.status(500).send({ message: "Server error" });
     }
 });
+
+app.post('/login', async (req, res) => {
+
+    const { username, password } = req.body;
+
+    const sql = "SELECT * FROM users WHERE username = ?";
+
+    db.get(sql, [username], async (err, user) => {
+
+        if (!user) {
+            return res.status(401).send({
+                message: "Invalid username or password"
+            });
+        }
+
+        const match = await bcrypt.compare(password, user.password);
+
+        if (match) {
+            res.send({ message: "Login successful" });
+        } else {
+            res.status(401).send({
+                message: "Invalid username or password"
+            });
+        }
+
+    });
+
+}); 
 
 
 
