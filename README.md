@@ -1,34 +1,45 @@
-README.md:
-
-````md
-# Secure Web Application
+# Web Security Application
 
 ## Overview
 
-This project is a secure web application developed using Node.js with Express, SQLite, HTML, CSS, and JavaScript.
+This project is a web security application developed using Node.js, Express, SQLite, HTML, CSS, and JavaScript.
 
-The application provides a simple user management system with the following features:
+The application provides a simple user management system that includes user registration, login, dashboard, and an admin page. It demonstrates common web application vulnerabilities and their mitigations through vulnerable and secure implementations.
 
-- User registration
-- User login
-- User dashboard
-- Admin page
-
-The project demonstrates common web security vulnerabilities and their mitigations, including:
+## Security Topics Covered
 
 - SQL Injection
 - Weak Password Storage
 - Cross-Site Scripting (XSS)
 - Access Control / Role-Based Access Control (RBAC)
-- Encryption and secure session cookies
+- HTTPS, encryption, and secure session cookies
 
-The goal of this project is to apply secure coding practices and show how common web application vulnerabilities can be detected and mitigated.
+## Technologies Used
 
----
+- Node.js
+- Express.js
+- SQLite
+- HTML
+- CSS
+- JavaScript
+- bcrypt
+- xss library
+- express-session
+- HTTPS / SSL certificate for local testing
+
+## Features
+
+- User registration and login
+- Secure password hashing using bcrypt
+- SQL Injection mitigation using parameterized queries
+- XSS mitigation using input sanitization
+- Role-Based Access Control for admin pages
+- Secure session cookie configuration
+- Local HTTPS testing using a self-signed SSL certificate
 
 ## Steps to Run the Application
 
-This project must be run locally because it uses a Node.js backend server, Express routes, and a SQLite database. GitHub Pages cannot run the backend server or database operations.
+This project must be run locally because it uses a Node.js backend server, Express routes, and a SQLite database. GitHub Pages cannot run backend servers or database operations.
 
 1. Download or clone the repository.
 
@@ -40,7 +51,7 @@ package.json
 database.sqlite
 server.cert
 server.key
-````
+```
 
 3. Install the required dependencies:
 
@@ -68,13 +79,11 @@ Advanced → Proceed to localhost
 
 This warning appears because the project uses a self-signed SSL certificate for local testing.
 
----
-
-## Instructions to Test the Security Features
+## Security Testing
 
 ### 1. SQL Injection
 
-The project demonstrates SQL Injection using a vulnerable login route and then mitigates it using parameterized queries.
+The project demonstrates SQL Injection using a vulnerable login route and mitigates it using parameterized queries.
 
 Test input example:
 
@@ -92,23 +101,19 @@ Expected result after mitigation:
 Invalid username or password
 ```
 
----
-
 ### 2. Weak Password Storage
 
-The project demonstrates weak password storage using MD5, then mitigates it using bcrypt.
+The project demonstrates weak password storage using MD5 and mitigates it using bcrypt.
 
-Before mitigation, weak hashing can produce predictable hashes.
+Before mitigation, passwords are stored using weak hashing.
 
-After mitigation, passwords are stored using bcrypt.
+After mitigation, passwords are stored using bcrypt hashes with salting.
 
 Expected result after mitigation:
 
 ```text
 Passwords are stored as bcrypt hashes, and identical passwords produce different hashes because bcrypt uses salting.
 ```
-
----
 
 ### 3. Cross-Site Scripting (XSS)
 
@@ -130,13 +135,9 @@ Expected result after mitigation:
 The malicious script is displayed as plain text and is not executed.
 ```
 
----
-
 ### 4. Access Control / RBAC
 
 The admin page is protected using Role-Based Access Control.
-
-Access rules:
 
 | Role  | Dashboard Access | Admin Page Access |
 | ----- | ---------------- | ----------------- |
@@ -187,12 +188,6 @@ role = admin
 
 After login, the dashboard should display the Admin Panel button.
 
-Then click the Admin Panel button or open:
-
-```text
-https://localhost:3000/admin.html
-```
-
 Expected result:
 
 ```text
@@ -201,17 +196,15 @@ Admin Panel is displayed successfully.
 
 Note: The username alone does not make a user an admin. The user must have `role = admin` in the database.
 
----
-
 ### 5. Encryption and Secure Sessions
 
 The application uses HTTPS/TLS with a self-signed SSL certificate for local testing.
 
 The session cookie is configured using security options such as:
 
-* `httpOnly`
-* `sameSite`
-* `secure`
+- `httpOnly`
+- `sameSite`
+- `secure`
 
 Expected result:
 
@@ -219,11 +212,12 @@ Expected result:
 The application runs on https://localhost:3000, and the session cookie is protected when HTTPS is used.
 ```
 
-Note:
+Note: The browser may display a warning because the SSL certificate is self-signed and not issued by a trusted Certificate Authority.
 
-```text
-The browser may display a warning because the SSL certificate is self-signed and not issued by a trusted Certificate Authority.
-```
+## What I Learned
 
-```
-
+- How SQL Injection works and how parameterized queries prevent it
+- How weak password storage can be improved using bcrypt
+- How XSS attacks can be mitigated using input sanitization
+- How Role-Based Access Control protects admin pages
+- How HTTPS and secure session cookies improve web application security
