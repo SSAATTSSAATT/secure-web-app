@@ -39,7 +39,6 @@ async function register() {
     }
 }
 
-// sol edit this method
 async function logout() {
   localStorage.clear();
 
@@ -50,7 +49,6 @@ async function logout() {
   window.location.href = "index.html";
 }
 
-// end sol
 
 // Keep this exactly as it is! 
 // Using .innerHTML is the XSS vulnerability you need to fix in Part 2[cite: 1].
