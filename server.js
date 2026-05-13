@@ -361,7 +361,7 @@ app.get('/all-bios', (req, res) => {
 });
 
 
-// Ghada
+
 // Ensuring sensitive data is stored securely and transmitted over HTTPS
 
 // Load SSL certificates generated via OpenSSL
